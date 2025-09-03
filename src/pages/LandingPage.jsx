@@ -455,19 +455,17 @@ const LandingPage = () => {
             <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
               Join thousands of users who never miss a payment. Start your free trial today.
             </p>
-            <SignedOut>
+            {!user ? (
               <Link to="/auth" className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors inline-flex items-center space-x-2">
                 <span>Start Free Trial</span>
                 <SafeIcon icon={FiArrowRight} className="h-5 w-5" />
               </Link>
-            </SignedOut>
-            
-            <SignedIn>
+            ) : (
               <Link to="/dashboard" className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors inline-flex items-center space-x-2">
                 <span>Go to Dashboard</span>
                 <SafeIcon icon={FiArrowRight} className="h-5 w-5" />
               </Link>
-            </SignedIn>
+            )}
           </motion.div>
         </div>
       </section>
