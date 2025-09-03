@@ -1,34 +1,22 @@
 import React from 'react'
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { SignedIn, SignedOut } from '@clerk/clerk-react'
-import { ClerkAuthProvider } from './contexts/ClerkAuthContext'
+import { AuthProvider } from './contexts/AuthContext'
 import { testConnection } from './lib/supabase'
 import LandingPage from './pages/LandingPage'
-import ClerkAuthForm from './components/Auth/ClerkAuthForm'
-import Dashboard from './pages/ClerkDashboard'
-import Reminders from './pages/ClerkReminders'
-import History from './pages/ClerkHistory'
+import AuthForm from './components/Auth/AuthForm'
+import Dashboard from './pages/Dashboard'
+import Reminders from './pages/Reminders'
+import History from './pages/History'
 import './App.css'
 
 const ProtectedRoute = ({ children }) => {
-  return (
-    <SignedIn>
-      {children}
-    </SignedIn>
-  )
+  const { user } = React.useContext(React.createContext({}))
+  return user ? children : <Navigate to="/auth" />
 }
 
 const PublicRoute = ({ children }) => {
-  return (
-    <>
-      <SignedOut>
-        {children}
-      </SignedOut>
-      <SignedIn>
-        <Navigate to="/dashboard" />
-      </SignedIn>
-    </>
-  )
+  const { user } = React.useContext(React.createContext({}))
+  return user ? <Navigate to="/dashboard" /> : children
 }
 
 const AppContent = () => {
@@ -38,7 +26,7 @@ const AppContent = () => {
   }, [])
 
   return (
-    <ClerkAuthProvider>
+    <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Routes>
@@ -51,7 +39,7 @@ const AppContent = () => {
               path="/auth" 
               element={
                 <PublicRoute>
-                  <ClerkAuthForm />
+                  <AuthForm />
                 </PublicRoute>
               } 
             />
@@ -87,7 +75,7 @@ const AppContent = () => {
           </Routes>
         </div>
       </Router>
-    </ClerkAuthProvider>
+    </AuthProvider>
   )
 }
 

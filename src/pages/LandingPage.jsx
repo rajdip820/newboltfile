@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { SignedIn, SignedOut } from '@clerk/clerk-react'
+import { useAuth } from '../contexts/AuthContext'
 import SafeIcon from '../common/SafeIcon'
 import * as FiIcons from 'react-icons/fi'
 
@@ -9,6 +9,7 @@ const { FiCreditCard, FiShield, FiCalendar, FiTrendingUp, FiCheck, FiDollarSign,
 
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user } = useAuth()
 
   const features = [
     {
@@ -93,20 +94,20 @@ const LandingPage = () => {
 
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
-              <SignedOut>
+              {!user ? (
+                <>
                 <Link to="/auth" className="text-gray-600 hover:text-primary-600 transition-colors font-medium">
                   Sign In
                 </Link>
                 <Link to="/auth" className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium">
                   Get Started
                 </Link>
-              </SignedOut>
-              
-              <SignedIn>
+                </>
+              ) : (
                 <Link to="/dashboard" className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium">
                   Go to Dashboard
                 </Link>
-              </SignedIn>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -131,20 +132,20 @@ const LandingPage = () => {
               <a href="#pricing" className="block text-gray-600 hover:text-primary-600 transition-colors">Pricing</a>
               <a href="#contact" className="block text-gray-600 hover:text-primary-600 transition-colors">Contact</a>
               <div className="pt-4 border-t border-gray-200 space-y-2">
-                <SignedOut>
+                {!user ? (
+                  <>
                   <Link to="/auth" className="block text-center text-gray-600 hover:text-primary-600 transition-colors font-medium py-2">
                     Sign In
                   </Link>
                   <Link to="/auth" className="block text-center bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium">
                     Get Started
                   </Link>
-                </SignedOut>
-                
-                <SignedIn>
+                  </>
+                ) : (
                   <Link to="/dashboard" className="block text-center bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium">
                     Go to Dashboard
                   </Link>
-                </SignedIn>
+                )}
               </div>
             </motion.div>
           )}
@@ -167,19 +168,17 @@ const LandingPage = () => {
                 Take control of your finances with smart payment reminders, automated tracking, and powerful analytics. Stay organized and never pay late fees again.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <SignedOut>
+                {!user ? (
                   <Link to="/auth" className="bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors flex items-center justify-center space-x-2">
                     <span>Start Free Trial</span>
                     <SafeIcon icon={FiArrowRight} className="h-5 w-5" />
                   </Link>
-                </SignedOut>
-                
-                <SignedIn>
+                ) : (
                   <Link to="/dashboard" className="bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors flex items-center justify-center space-x-2">
                     <span>Go to Dashboard</span>
                     <SafeIcon icon={FiArrowRight} className="h-5 w-5" />
                   </Link>
-                </SignedIn>
+                )}
                 
                 <button className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors">
                   Watch Demo
